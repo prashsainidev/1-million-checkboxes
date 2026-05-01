@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 // Modules import
 import { connectDB } from "./src/config/db.js";
 import authRoutes from "./src/routes/auth.routes.js";
+import oidcRoutes from "./src/routes/oidc.routes.js";
 import { handleSocketConnection } from "./src/sockets/socket.handler.js";
 
 dotenv.config();
@@ -27,17 +28,18 @@ app.use(express.static("public"));
 
 // routes
 app.use("/api/auth", authRoutes);
+app.use("/", oidcRoutes);
 
 app.get("/", (req, res) => {
   res.send("1 Million Checkboxes API is Running");
 });
 
 // websockets
-wss.on("connection", (ws) => {
+wss.on("connection", (ws, req) => {
   console.log(`[Socket] client connected. active: ${wss.clients.size}`);
 
-  // attach socket events
-  handleSocketConnection(ws, wss);
+  // req ko pass karna zaroori hai taaki cookie padhi ja sake
+  handleSocketConnection(ws, wss, req);
 
   ws.on("close", () => {
     console.log(`[Socket] client disconnected. active: ${wss.clients.size}`);

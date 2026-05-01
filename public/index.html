@@ -1,28 +1,96 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>1 Million Checkboxes</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- Premium Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1 Million Checkboxes</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="logo">
+        <span class="logo-mark"></span>
+        <span>1M Checkboxes</span>
+      </div>
+      <div class="stats">
+        <span class="status-dot"></span>
+        <span>Live sync</span>
+        <strong id="userCount">1</strong>
+      </div>
+      <div id="userActions" class="user-actions">
+        <button type="button" id="loginBtn">Sign in to edit</button>
+        <button type="button" id="logoutBtn" class="hidden">Logout</button>
+      </div>
+    </header>
 
-  <header class="navbar">
-    <div class="logo">☑ 1M Checkboxes</div>
-    <div class="stats">Connected: <span id="userCount">0</span></div>
-  </header>
+    <main class="app-shell">
+      <section class="toolbar">
+        <div class="hero-copy">
+          <h1>Live Checkbox Board</h1>
+          <p class="board-copy">
+            A real-time shared board where every checked box updates instantly
+            for everyone watching.
+          </p>
+        </div>
+        <div class="metric-strip" aria-label="Board statistics">
+          <div class="metric-card metric-card-primary">
+            <span id="checkedCount">0</span>
+            <small>checked boxes</small>
+          </div>
+          <div class="metric-card">
+            <span id="emptyCount">1,000</span>
+            <small>empty boxes</small>
+          </div>
+          <div class="metric-card">
+            <span id="fillPercent">0%</span>
+            <small>filled</small>
+          </div>
+        </div>
+      </section>
 
-  <main class="grid-wrapper">
-    <!-- Javascript yahan par lazily boxes render karegi -->
-    <div id="checkboxGrid" class="checkbox-grid"></div>
-  </main>
+      <section class="board-section" aria-label="Checkbox board">
+        <div class="board-topline">
+          <div>
+            <p class="board-label">1,000 visible boxes</p>
+          </div>
+          <p class="board-hint">Click any box to claim it live.</p>
+        </div>
+        <div class="grid-wrapper">
+          <div id="checkboxGrid" class="checkbox-grid"></div>
+        </div>
+      </section>
+    </main>
 
-  <!-- Error dikhane ke liye Toast Notification -->
-  <div id="toast" class="toast hidden">Cooldown active! Wait 10 seconds.</div>
+    <div id="toast" class="toast hidden"></div>
 
-  <script src="app.js"></script>
-</body>
+    <div id="authModal" class="auth-modal hidden">
+      <form id="authForm" class="auth-box">
+        <h2>Sign in to edit</h2>
+        <p id="authSubtitle">
+          Everyone can watch live. Sign in only when you want to change boxes.
+        </p>
+
+        <div id="registerFields" class="hidden">
+          <input type="text" id="firstNameInput" placeholder="First Name" />
+          <input type="text" id="lastNameInput" placeholder="Last Name" />
+        </div>
+
+        <input type="email" id="emailInput" placeholder="Email" />
+        <input type="password" id="passwordInput" placeholder="Password" />
+
+        <p id="authMessage" class="auth-message hidden"></p>
+
+        <button id="authBtn">Sign In</button>
+
+        <button type="button" id="toggleAuth" class="text-button">
+          Create an account
+        </button>
+        <button type="button" id="viewerBtn" class="text-button">
+          Keep watching
+        </button>
+      </form>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
 </html>
