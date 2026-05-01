@@ -35,3 +35,5 @@ Thumbs.db
 # Deployment tooling
 .vercel/
 .netlify/
+
+README.md
