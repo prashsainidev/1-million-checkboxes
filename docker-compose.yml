@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  mongodb:
+    image: mongo:8.0
+    container_name: 1m_mongodb
+    restart: always
+    ports:
+      - "27018:27017" # Aapka purana custom port
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - 1m_mongo_data:/data/db
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: 1m_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - 1m_redis_data:/data
+
+volumes:
+  1m_mongo_data:
+  1m_redis_data:
