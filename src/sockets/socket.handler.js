@@ -1,6 +1,11 @@
+import crypto from "node:crypto";
 import { toggleCheckbox, getAllCheckboxes } from "../services/checkbox.service.js";
+import { checkRateLimit } from "../middlewares/rateLimiter.js";
 
 export const handleSocketConnection = async (ws, wss) => {
+  // assign a unique ID to every new browser tab that connects
+  ws.id = crypto.randomUUID();
+
   // send initial grid state
   const currentState = await getAllCheckboxes();
   if (currentState) {
@@ -9,10 +14,19 @@ export const handleSocketConnection = async (ws, wss) => {
 
   ws.on("message", async (message) => {
     try {
-      const parsedMessage = JSON.parse(message);
+      const parsed = JSON.parse(message);
 
-      if (parsedMessage.type === "TOGGLE") {
-        const { index, state } = parsedMessage;
+      if (parsed.type === "TOGGLE") {
+        const { index, state } = parsed;
+
+        // check if user is allowed to click (10 sec cooldown)
+        const isAllowed = await checkRateLimit(ws.id);
+
+        if (!isAllowed) {
+          // send error back to UI so frontend can show an alert message
+          ws.send(JSON.stringify({ type: "ERROR", message: "Cooldown active! Wait 10 seconds." }));
+          return; // stop process here, don't update redis
+        }
 
         // save to redis
         await toggleCheckbox(index, state);
@@ -24,8 +38,8 @@ export const handleSocketConnection = async (ws, wss) => {
           }
         });
       }
-    } catch (error) {
-      console.error(`[Socket] Message error: ${error.message}`);
+    } catch (err) {
+      console.error(`[Socket] failed to parse message:`, err.message);
     }
   });
 };
