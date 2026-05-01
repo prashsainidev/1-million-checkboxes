@@ -24,7 +24,7 @@ export const handleSocketConnection = async (ws, wss) => {
 
         if (!isAllowed) {
           // send error back to UI so frontend can show an alert message
-          ws.send(JSON.stringify({ type: "ERROR", message: "Cooldown active! Wait 10 seconds." }));
+          ws.send(JSON.stringify({ type: "ERROR", message: "Cooldown active! Wait 10 seconds.", index, state }));
           return; // stop process here, don't update redis
         }
 

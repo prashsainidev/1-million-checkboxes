@@ -22,6 +22,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// serve frontend UI
+app.use(express.static("public"));
+
 // routes
 app.use("/api/auth", authRoutes);
 
