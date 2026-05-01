@@ -1,12 +1,16 @@
 import { Redis } from "ioredis";
 
-// init redis client
+// Standard client for Data (Bitmaps, Rate Limit)
 export const redis = new Redis(process.env.REDIS_URL);
 
+// Pub/Sub requires dedicated clients
+export const publisher = new Redis(process.env.REDIS_URL);
+export const subscriber = new Redis(process.env.REDIS_URL);
+
 redis.on("connect", () => {
-  console.log("[Redis] Connected successfully");
+  console.log("[Redis] Main Data Connected");
 });
 
-redis.on("error", (err) => {
-  console.error(`[Redis] Connection error: ${err.message}`);
+publisher.on("connect", () => {
+  console.log("[Redis] Publisher Connected");
 });
